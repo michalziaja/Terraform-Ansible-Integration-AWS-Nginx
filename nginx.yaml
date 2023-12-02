@@ -1,0 +1,40 @@
+---
+- hosts: all
+  become: true
+  become_user: root
+
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
+    - name: Install Nginx
+      apt:
+        name: nginx
+        state: latest
+
+    - name: Copy index.html to remote server
+      copy:
+        src: index.html
+        dest: /var/www/html/index.html
+    
+    - name: Copy logo.png to remote server
+      copy:
+        src: logo.png
+        dest: /var/www/html/logo.png
+
+    - name: Copy diagram.png to remote server
+      copy:
+        src: diagram.png
+        dest: /var/www/html/diagram.png
+
+    - name: Run update_ip.sh script
+      script: update_ip.sh
+
+    - name: Make sure Nginx is running
+      service:
+        name: nginx
+        state: started
+
+
+  
